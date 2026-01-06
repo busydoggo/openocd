@@ -3,7 +3,8 @@
 %C%_libtarget_la_LIBADD = %D%/openrisc/libopenrisc.la \
 	%D%/riscv/libriscv.la \
 	%D%/xtensa/libxtensa.la \
-	%D%/espressif/libespressif.la
+	%D%/espressif/libespressif.la \
+	%D%/ambarella/libambarella.la
 
 %C%_libtarget_la_CPPFLAGS = $(AM_CPPFLAGS)
 
@@ -22,7 +23,7 @@ noinst_LTLIBRARIES += %D%/libtarget.la
 	$(STM8_SRC) \
 	$(INTEL_IA32_SRC) \
 	$(ESIRISC_SRC) \
-        $(ARC_SRC) \
+	$(ARC_SRC) \
 	%D%/avrt.c \
 	%D%/dsp563xx.c \
 	%D%/dsp563xx_once.c \
@@ -243,3 +244,4 @@ include %D%/openrisc/Makefile.am
 include %D%/riscv/Makefile.am
 include %D%/xtensa/Makefile.am
 include %D%/espressif/Makefile.am
+include %D%/ambarella/Makefile.am

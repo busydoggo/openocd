@@ -5,7 +5,12 @@
  *    SimonQian@SimonQian.com                                              *
  ***************************************************************************/
 
-/* The specification for SVF is available here:
+/* SVF = Serial Vector Format
+ * 一种 ASCII 文本格式，描述 JTAG 操作序列
+ * 最初由 Texas Instruments 开发，现已成为行业标准
+ * 用于描述 JTAG 边界扫描测试和编程操作
+ *
+ *  The specification for SVF is available here:
  * http://www.asset-intertech.com/support/svf.pdf
  * Below, this document is referred to as the "SVF spec".
  *

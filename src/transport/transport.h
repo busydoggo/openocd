@@ -22,6 +22,8 @@
 #define TRANSPORT_HLA_SWD               BIT(3)
 #define TRANSPORT_DAPDIRECT_JTAG        BIT(4)
 #define TRANSPORT_DAPDIRECT_SWD         BIT(5)
+// 意法半导体单线接口模块, STMicroelectronics Wire Interface Module
+// 这是 STMicroelectronics（ST）专有的单线调试接口，主要用于 STM8 系列微控制器。
 #define TRANSPORT_SWIM                  BIT(6)
 
 /* mask for valid ID */

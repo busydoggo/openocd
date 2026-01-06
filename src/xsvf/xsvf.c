@@ -14,7 +14,10 @@
  *   Dick Hollenbeck <dick@softplc.com>                                    *
  ***************************************************************************/
 
-/* The specification for SVF is available here:
+/* XSVF 指的是 Xilinx Serial Vector Format（赛灵思串行向量格式），这是 SVF 的二进制
+ * 压缩版本，专门针对 Xilinx 器件优化
+ *
+ * The specification for SVF is available here:
  * http://www.asset-intertech.com/support/svf.pdf
  * Below, this document is referred to as the "SVF spec".
  *

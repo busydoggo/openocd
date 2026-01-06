@@ -110,6 +110,7 @@ static struct target_type *target_types[] = {
 	&testee_target,
 	&xscale_target,
 	&xtensa_chip_target,
+	&ambarella_target
 };
 
 struct target *all_targets;

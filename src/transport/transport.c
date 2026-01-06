@@ -43,14 +43,17 @@ extern struct command_context *global_cmd_ctx;
 
 /*
  * Infrastructure internals
+ *
+ * SWIM 是 STMicroelectronics Wire Interface Module（意法半导体单线接口模块），
+ * 这是 STMicroelectronics（ST）专有的单线调试接口，主要用于 STM8 系列微控制器。
  */
 
 /** List of transports known to OpenOCD. */
 static const struct {
-	unsigned int id;
-	const char *name;
-	const char *full_name;
-	const char *deprecated_name;
+	unsigned int id;                // 传输协议的唯一标识符（位掩码）
+	const char *name;               // 协议简称（用户命令中使用）
+	const char *full_name;          // 协议全称（显示给用户）
+	const char *deprecated_name;    // 已弃用的名称（兼容性支持）
 } transport_names[] = {
 	{ TRANSPORT_JTAG,           "jtag", "jtag",             NULL,             },
 	{ TRANSPORT_SWD,            "swd",  "swd",              NULL,             },

@@ -1,3 +1,4 @@
+# 在 OpenOCD 中，PLD 指的是 Programmable Logic Device（可编程逻辑器件），主要用于配置和管理 FPGA 或 CPLD。
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 noinst_LTLIBRARIES += %D%/libpld.la

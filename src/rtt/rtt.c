@@ -1,6 +1,14 @@
-// SPDX-License-Identifier: GPL-2.0-or-later
-
-/*
+/**
+ * @brief OpenOCD 中的 RTT（Real-Time Transfer，实时传输）
+ * 
+ * RTT 是一个 双向通信通道，允许目标芯片（如 STM32）与主机调试器之间进行高速数据交换，而无需额外的硬件接口。
+ *
+ * RTT 是 软件实现的 通信机制，需要一个 内存缓冲区（控制块）来交换数据
+ * 固件需要 主动写入数据 到缓冲区
+ * 固件需要 调用 RTT API 来处理通信
+ * 
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
  * Copyright (C) 2016-2020 by Marc Schink <dev@zapb.de>
  */
 

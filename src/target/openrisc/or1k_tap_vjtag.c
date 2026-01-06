@@ -1,3 +1,15 @@
+/**
+ * @brief OpenOCD 中针对 Altera FPGA 虚拟 JTAG (vJTAG) 支持 OpenRISC 处理器调试的实现
+ *
+ * TAP (Test Access Port)
+ *
+ * 这个文件实现了一个特殊的 JTAG 接口，用于在 Altera FPGA​ 中调试 OpenRISC 处理器。由于
+ * FPGA 内部没有物理 JTAG 接口，Altera 提供了 虚拟 JTAG (Virtual JTAG)​ 功能，可以通过
+ * FPGA 的 JTAG 端口访问 FPGA 内部逻辑。在 FPGA 设计中实例化 vJTAG IP 核，它连接到内部
+ * 逻辑，外部通过 FPGA 的 JTAG 访问
+ *
+ * 外部调试器 → 物理 JTAG → USER0/USER1 指令 → vJTAG 节点 → OpenRISC 调试接口
+ */
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 /***************************************************************************
@@ -287,8 +299,8 @@ static int or1k_tap_vjtag_init(struct or1k_jtag *jtag_info)
 }
 
 static struct or1k_tap_ip vjtag_tap = {
-	.name = "vjtag",
-	.init = or1k_tap_vjtag_init,
+	.name = "vjtag",                   // 驱动名称
+	.init = or1k_tap_vjtag_init,       // 初始化函数
 };
 
 int or1k_tap_vjtag_register(void)

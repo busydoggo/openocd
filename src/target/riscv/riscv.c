@@ -6104,36 +6104,95 @@ riscv_insn_t riscv_read_progbuf(struct target *target, int index)
 	return r->read_progbuf(target, index);
 }
 
+/**
+ * @brief 执行存储在程序缓冲区中的指令
+ *
+ * progbuf= Program Buffer，RISC-V 调试模块的一个特性
+ * 允许调试器在目标上执行自定义指令序列
+ *
+ * @param target 
+ * @param cmderr 输出参数，返回错误码
+ *
+ * @return int     输出参数，返回错误码
+ */
 int riscv_execute_progbuf(struct target *target, uint32_t *cmderr)
 {
 	RISCV_INFO(r);
 	return r->execute_progbuf(target, cmderr);
 }
 
+/**
+ * @brief 填充调试模块接口（DMI）的写操作数据包
+ *
+ * DMI= Debug Module Interface，RISC-V 调试规范定义的接口
+ *
+ * @param target 
+ * @param buf 输出缓冲区，填充后的数据包
+ * @param a   地址（address）
+ * @param d   数据（data）
+ */
 void riscv_fill_dmi_write(const struct target *target, uint8_t *buf, uint32_t a, uint32_t d)
 {
 	RISCV_INFO(r);
 	r->fill_dmi_write(target, buf, a, d);
 }
 
+/**
+ * @brief 填充 DMI 读操作数据包
+ *
+ * 与写操作类似，但没有数据字段
+ * 用于从调试模块读取寄存器值
+ * 
+ * @param target 
+ * @param buf 
+ * @param a 
+ */
 void riscv_fill_dmi_read(const struct target *target, uint8_t *buf, uint32_t a)
 {
 	RISCV_INFO(r);
 	r->fill_dmi_read(target, buf, a);
 }
 
+/**
+ * @brief 填充 DMI 空操作（No-Operation）数据包
+ *
+ * NOP：不执行任何操作
+ * 用于填充流水线、保持连接等
+ *
+ * @param target 
+ * @param buf 
+ */
 void riscv_fill_dm_nop(const struct target *target, uint8_t *buf)
 {
 	RISCV_INFO(r);
 	r->fill_dm_nop(target, buf);
 }
 
+/**
+ * @brief 获取 DMI 地址总线的位数
+ *
+ * 不同 RISC-V 实现可能有不同的地址宽度
+ * 用于正确构造数据包
+ *
+ * @param target 
+ * @return unsigned int 
+ */
 unsigned int riscv_get_dmi_address_bits(const struct target *target)
 {
 	RISCV_INFO(r);
 	return r->get_dmi_address_bits(target);
 }
 
+/**
+ * @brief 检查 RISC-V 硬件触发器是否存在​
+ *
+ * 这个函数通过 写入-读取-验证​ 的模式来探测特定索引的硬件触发器是否存在。
+ * 这是 RISC-V 调试规范中推荐的触发器发现机制。
+ *
+ * @param target 
+ * @param index 
+ * @return int 
+ */
 static int check_if_trigger_exists(struct target *target, unsigned int index)
 {
 	/* If we can't write tselect, then this hart does not support triggers. */
@@ -6151,6 +6210,15 @@ static int check_if_trigger_exists(struct target *target, unsigned int index)
 }
 
 /**
+ * 获取 RISC-V 触发器支持的类型信息​ 的功能。这是一个关键函数，用于确定特定硬件
+ * 触发器支持哪些调试功能
+ *
+ * 类型 2：MCONTROL（内存控制，用于监视点）
+ * 类型 3：ICOUNT（指令计数）
+ * 类型 4：ITRIGGER（指令触发）
+ * 类型 5：ETRIGGER（外部触发）
+ * 类型 6：MCONTROL6（新版内存控制）
+ *
  * This function reads `tinfo` or `tdata1`, when reading `tinfo` fails,
  * to determine trigger types supported by a trigger.
  * It is assumed that the trigger is already selected via writing `tselect`.
@@ -6175,6 +6243,20 @@ static int get_trigger_types(struct target *target, unsigned int *trigger_tinfo,
 	return ERROR_OK;
 }
 
+/**
+ * @brief 禁用 RISC-V 触发器中的 dmode 位
+ *
+ * 这个函数检查 RISC-V 硬件触发器是否设置了 dmode 位（调试模式位）。
+ * 如果设置了，就禁用这个触发器。这是为了防止残留的调试会话影响当前调试。
+ *
+ * dmode​ = Debug Mode
+ * 当设置为 1 时：触发器只在调试模式下有效
+ * 当设置为 0 时：触发器在正常模式和调试模式下都有效
+ *
+ * @param target 
+ * @param tdata1 
+ * @return int 
+ */
 static int disable_trigger_if_dmode(struct target *target, riscv_reg_t tdata1)
 {
 	bool dmode_is_set = false;
@@ -6212,6 +6294,13 @@ static int disable_trigger_if_dmode(struct target *target, riscv_reg_t tdata1)
  * something.
  * Disable any hardware triggers that have dmode set. We can't have set them
  * ourselves. Maybe they're left over from some killed debug session.
+ *
+ * RISC-V 处理器触发器的枚举和初始化功能:
+ *
+ * - 发现和统计可用的硬件触发器（断点、监视点）
+ * - 初始化触发器的管理结构
+ * - 禁用可能残留的调试会话触发器
+ * - 建立触发器缓存以优化性能
  */
 int riscv_enumerate_triggers(struct target *target)
 {
@@ -6289,6 +6378,7 @@ int riscv_enumerate_triggers(struct target *target)
 	return ERROR_OK;
 }
 
+// RISC-V 在 Xilinx FPGA 中通过 BSCAN 隧道进行 JTAG 扫描的功能
 void riscv_add_bscan_tunneled_scan(struct jtag_tap *tap, const struct scan_field *field,
 					riscv_bscan_tunneled_scan_context_t *ctxt)
 {
@@ -6301,8 +6391,9 @@ void riscv_add_bscan_tunneled_scan(struct jtag_tap *tap, const struct scan_field
 		ctxt->tunneled_dr[2].num_bits = 7;
 		ctxt->tunneled_dr_width = field->num_bits;
 		ctxt->tunneled_dr[2].out_value = &ctxt->tunneled_dr_width;
-		/* for BSCAN tunnel, there is a one-TCK skew between shift in and shift out, so
-		   scanning num_bits + 1, and then will right shift the input field after executing the queues */
+		/* 这意味着在 BSCAN 隧道中，输入和输出之间有一个 TCK 时钟周期的偏移，需要在软件中补偿。
+		 * for BSCAN tunnel, there is a one-TCK skew between shift in and shift out, so
+		 * scanning num_bits + 1, and then will right shift the input field after executing the queues */
 
 		ctxt->tunneled_dr[1].num_bits = field->num_bits + 1;
 		ctxt->tunneled_dr[1].out_value = field->out_value;
