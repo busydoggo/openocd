@@ -162,6 +162,7 @@ struct adapter_driver *adapter_drivers[] = {
 	&xlnx_pcie_xvc_adapter_driver,
 	&xlnx_axi_xvc_adapter_driver,
 #endif
+	&amba_debug_bus_adapter_driver,
 
 		NULL,
 };

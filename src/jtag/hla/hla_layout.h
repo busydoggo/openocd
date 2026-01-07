@@ -22,6 +22,7 @@ struct hl_interface_param;
 extern struct hl_layout_api stlink_usb_layout_api;
 extern struct hl_layout_api icdi_usb_layout_api;
 extern struct hl_layout_api nulink_usb_layout_api;
+extern struct hl_layout_api amba_dbg_layout_api;
 
 /** */
 struct hl_layout_api {
@@ -69,7 +70,7 @@ struct hl_layout_api {
 	/** */
 	int (*write_debug_reg)(void *handle, uint32_t addr, uint32_t val);
 	/**
-	 * Read the idcode of the target connected to the adapter
+	 * 调试器读取目标芯片的IDCODE（设备标识码）
 	 *
 	 * If the adapter doesn't support idcode retrieval, this callback should
 	 * store 0 to indicate a wildcard match.

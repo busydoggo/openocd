@@ -69,6 +69,13 @@ static const struct hl_layout hl_layouts[] = {
 	 .api = &nulink_usb_layout_api,
 	},
 #endif
+	{
+	 .name = "amba-dbg",
+	 .open = hl_layout_open,
+	 .close = hl_layout_close,
+	 .api = &amba_dbg_layout_api,
+	 },
+
 	{.name = NULL, /* END OF TABLE */ },
 };
 

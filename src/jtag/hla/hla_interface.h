@@ -11,6 +11,8 @@
 #ifndef OPENOCD_JTAG_HLA_HLA_INTERFACE_H
 #define OPENOCD_JTAG_HLA_HLA_INTERFACE_H
 
+#include "hla_transport.h"
+
 /** */
 struct target;
 /** */
